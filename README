@@ -1,0 +1,9 @@
+A Python based static site generator (similar to Jekyll) from Markdown templates.
+
+Requirements:
+
+	https://github.com/FSX/misaka
+
+	pip install misaka
+
+
