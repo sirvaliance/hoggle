@@ -4,5 +4,9 @@ server-setup/settings.py
 bin/
 include/
 lib/
+build/
+local
+dist/
+hyde.egg-info/
 .Python
 
