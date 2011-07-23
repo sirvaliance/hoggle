@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 setup(
 
     name = "hyde",
-    version = "0.1"
+    version = "0.1",
     packages = find_packages(),
     package_data = {
         "hyde": [
@@ -25,6 +25,6 @@ setup(
         'console_scripts': [
             "hyde = hyde.__main__:main",
         ]
-    }
-    install_requires = ['tornado', 'misaka']
+    },
+    install_requires = ['tornado', 'misaka'],
 )
