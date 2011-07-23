@@ -6,4 +6,8 @@ Requirements:
 
 	pip install misaka
 
+    http://tornadoweb.org
+
+    pip install tornado
+
 
