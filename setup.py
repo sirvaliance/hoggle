@@ -4,11 +4,11 @@ from setuptools import setup, find_packages
 
 setup(
 
-    name = "hyde",
+    name = "hoggle",
     version = "0.1",
     packages = find_packages(),
     package_data = {
-        "hyde": [
+        "hoggle": [
             "app_templates/*.txt",
         ]
 
@@ -16,14 +16,14 @@ setup(
 
     # Metadata for PyPI
     description = "A static website generator from Markdown templates",
-    url = "https://github.com/sirvaliance/hyde",
+    url = "https://github.com/sirvaliance/hoggle",
     author = "Sir Valiance",
     author_email = "sir@sirvaliance.com",
     license = "BSDv3",
 
     entry_points = {
         'console_scripts': [
-            "hyde = hyde.__main__:main",
+            "hoggle = hoggle.__main__:main",
         ]
     },
     install_requires = ['tornado', 'misaka'],

@@ -1,4 +1,4 @@
-""" Hyde
+""" Hoggle
 The code is in a horrid state and will be refactored and cleaned up in the
 morning.  This will eventually be generallized for a broad audience.  Possibly
 adding auto deployment with Fabric.
@@ -41,8 +41,6 @@ template_footer = """
 
 """
 
-
-template_list = list()
 
 def create_templates(arg, dirname, names):
 
@@ -125,7 +123,7 @@ def config_value(config, section, key, default=None):
 
 
 def main():
-    arg_parse = argparse.ArgumentParser(prog="hyde")
+    arg_parse = argparse.ArgumentParser(prog="hoggle")
     arg_parse.add_argument("-v", action="version", version="0.1")
     
     command_parsers = arg_parse.add_subparsers(dest="command")
@@ -137,13 +135,13 @@ def main():
     args = arg_parse.parse_args()
 
     config = ConfigParser.RawConfigParser()
-    config.read(os.path.expanduser("~/.hyde"))
+    config.read(os.path.expanduser(".hoggle"))
     config = {
         "repo_dir": config_value(config, "locations", "repo_dir"),
         "output_dir": config_value(config, "locations", "output_dir"),
     }
     if config["repo_dir"] is None or config["output_dir"] is None:
-        print ("You must setup a .hyde file to run hyde.")
+        print ("You must setup a .hoggle file to run hoggle.")
 
     {
         "build": build_site,
