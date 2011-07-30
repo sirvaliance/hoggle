@@ -16,6 +16,7 @@ import re
 import dircache
 import argparse
 import ConfigParser
+from distutils import dir_util
 
 import misaka
 
@@ -101,6 +102,9 @@ def create_templates(arg, dirname, names):
 def build_site(args, config):
     print "Build Site"
     template_list = list()
+    dir_util.copy_tree(
+            os.path.join(config["repo_dir"]),
+            config["output_dir"])
     os.path.walk(os.path.join(config["repo_dir"], 'md/'), 
                  create_templates,
                 {"repo_dir": config["repo_dir"], 
