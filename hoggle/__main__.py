@@ -87,7 +87,7 @@ def create_templates(arg, dirname, names):
 
         cls = dict()
         cls["name"] = str(output_dirname.split('/')[-1]).title() + str(filename).title()
-		cls["name"] = cls["name"].replace('-', '')
+        cls["name"] = cls["name"].replace('-', '')
 
         template_p = output_dirname.split("/")
         cls["template_name"] = "%s/%s.html" % ("/".join(template_p), filename) 
