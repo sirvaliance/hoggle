@@ -22,6 +22,8 @@ import misaka
 
 from tornado import template
 
+from page import Page
+
 main_app_template = os.path.join(
     os.path.abspath(os.path.dirname(__file__)),
     "app_templates", "main_app_template.txt"
@@ -85,34 +87,31 @@ def create_templates(arg, dirname, names):
         output.write(m)
         output.close()
 
-        cls = dict()
-        cls["name"] = str(output_dirname.split('/')[-1]).title() + str(filename).title()
-        cls["name"] = cls["name"].replace('-', '')
 
-        template_p = output_dirname.split("/")
-        cls["template_name"] = "%s/%s.html" % ("/".join(template_p), filename) 
-
-        if filename == "index":
-            cls["handler"] = "/%s/" % (output_dirname)
-        else:
-            cls["handler"] = "/%s/%s/" % (output_dirname, filename)
-
-        arg["template_list"].append(cls)
+        # Build Page
+        page = Page(output_dirname, filename)
+        arg["template_list"].append(page)
 
 
 def build_site(args, config):
     print "Build Site"
+
     template_list = list()
+
     dir_util.copy_tree(
             os.path.join(config["repo_dir"]),
             config["output_dir"])
+
     os.path.walk(os.path.join(config["repo_dir"], 'md/'), 
                  create_templates,
                 {"repo_dir": config["repo_dir"], 
                  "output_dir": config["output_dir"],
                  "template_list": template_list })
+
     t = template.Template(open(main_app_template, 'r').read())
-    main_output = t.generate(classes=template_list)
+
+    main_output = t.generate(pages=template_list)
+
     f = open(config["output_dir"] + 'main.py', 'w')
     f.write(main_output)
     f.close()

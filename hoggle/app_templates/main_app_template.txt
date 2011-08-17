@@ -13,11 +13,11 @@ class AboutHandler(tornado.web.RequestHandler):
 	def get(self):
 		self.render("about.html")
 
-{% for c in classes %}
+{% for p in pages %}
 
-class {{ c["name"] }}(tornado.web.RequestHandler):
+class {{ p.name }}(tornado.web.RequestHandler):
 	def get(self):
-		self.render("{{ c['template_name'] }}")
+		self.render("{{ p.template_name }}")
 {% end %}
 
 	
@@ -27,8 +27,8 @@ class Application(tornado.web.Application):
 			(r"/", MainHandler),
 			(r"/about/", AboutHandler),
 
-			{% for c in classes %}
-			(r"{{ c["handler"] }}", {{ c["name"] }}),
+			{% for p in pages %}
+			(r"{{ p.handler }}", {{ p.name }}),
 			{% end %}
 
 
