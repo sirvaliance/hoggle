@@ -27,17 +27,18 @@ main_app_template = os.path.join(
     "app_templates", "main_app_template.txt"
 )
 
+
+def find_markdown_templates(dirname):
+    files = os.listdir(dirname)
+    md_files = re.compile(".md$", re.IGNORECASE)
+    return filter(md_files.search, files) 
+
+
 def create_templates(arg, dirname, names):
 
-    o_dir = dirname.split(arg["repo_dir"])
-   
-    del o_dir[0]
-
-    d = "".join(o_dir)
-    e = d.split("/")
-    del e[0]
-    del e[0]
-    output_dirname = "/".join(e)
+    output_dir = dirname.replace(arg["repo_dir"], "")
+    e = output_dir.split("/")
+    output_dirname = e[-1]
     
     template_path = os.path.join(arg['output_dir'],"templates/") + output_dirname
 
@@ -46,38 +47,40 @@ def create_templates(arg, dirname, names):
     if not os.path.exists(template_path):
         os.makedirs(template_path)
 
-    # Find all Markdown templates in current directory
-    files = os.listdir(dirname)
-    md_files = re.compile(".md$", re.IGNORECASE)
-    files = filter(md_files.search, files) 
+    print "Searching For Markdown Templates in %s/" % output_dirname
 
-	# Iterate through all files in directory and gen output
+    files = find_markdown_templates(dirname)
+
     for f in files:
-        # Build Page
         page = Page(output_dirname, f)
         page.write_html_file(arg["output_dir"], dirname)
-        arg["template_list"].append(page)
+        arg["page_list"].append(page)
+        print "Generated Page At %s" % page.handler
 
 
 def build_site(args, config):
-    print "Build Site"
+    print "Hoggle: Building Site at %s" % config["repo_dir"] 
 
-    template_list = list()
+    page_list = list()
 
+    # Copy Over Project to Ouput Directory
+    # This would include all static media, base templates
     dir_util.copy_tree(
             os.path.join(config["repo_dir"]),
             config["output_dir"])
 
+    # Walk the md/ directory and generate the html templates
     os.path.walk(os.path.join(config["repo_dir"], 'md/'), 
                  create_templates,
                 {"repo_dir": config["repo_dir"], 
                  "output_dir": config["output_dir"],
-                 "template_list": template_list })
+                 "page_list": page_list })
 
+
+    # Use Tornado's templating system to generate the main.py python
+    # File that the project will be run off of
     t = template.Template(open(main_app_template, 'r').read())
-
-    main_output = t.generate(pages=template_list)
-
+    main_output = t.generate(pages=page_list)
     f = open(config["output_dir"] + 'main.py', 'w')
     f.write(main_output)
     f.close()
