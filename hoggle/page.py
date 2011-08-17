@@ -1,21 +1,5 @@
 import misaka
 
-template_header = """
-{% extends "../base.html" %}
-
-{% block content %}
-<div class="grid_7">
-
-"""
-
-template_footer = """
-<div class="clear_40"></div>
-</div>
-{% end %}
-
-"""
-
-
 class Page(object):
 
     def __init__(self, output_dir_name, markdown_file):
@@ -41,13 +25,31 @@ class Page(object):
         self.handler = page_handler
         self.output_dir_name = output_dir_name
 
+    def wrap_template(self, body):
+        template_header = """
+        {% extends "../base.html" %}
+
+        {% block content %}
+        <div class="grid_7">
+
+        """
+
+        template_footer = """
+        <div class="clear_40"></div>
+        </div>
+        {% end %}
+
+        """
+
+        return template_header + body + template_footer
+
     def write_html_file(self, output_directory, dirname):
 
         markdown_text = open(dirname + '/' + self.markdown_file, 'r')
         m = misaka.html(markdown_text.read())
         markdown_text.close()
 
-        m = template_header + m + template_footer
+        m = self.wrap_template(m)
 
         # Change to a more readable format
         output_path = output_directory + "templates/%s/%s.html"
