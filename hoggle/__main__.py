@@ -18,8 +18,6 @@ import argparse
 import ConfigParser
 from distutils import dir_util
 
-import misaka
-
 from tornado import template
 
 from page import Page
@@ -28,22 +26,6 @@ main_app_template = os.path.join(
     os.path.abspath(os.path.dirname(__file__)),
     "app_templates", "main_app_template.txt"
 )
-
-template_header = """
-{% extends "../base.html" %}
-
-{% block content %}
-<div class="grid_7">
-
-"""
-
-template_footer = """
-	<div class="clear_40"></div>
-</div>	
-{% end %}
-
-"""
-
 
 def create_templates(arg, dirname, names):
 
@@ -71,25 +53,9 @@ def create_templates(arg, dirname, names):
 
 	# Iterate through all files in directory and gen output
     for f in files:
-
-        markdown_text = open(dirname + '/' + f, 'r')
-        m = misaka.html(markdown_text.read())
-        markdown_text.close()
-
-        m = template_header + m + template_footer
-
-        # make this path specifiable by the user as cmd arg
-        filename = f.split('.md')[0]
-
-        # Change to a more readable format
-        output_path = arg["output_dir"] + "templates/%s/%s.html" % (output_dirname, filename)
-        output = open(output_path, 'w')
-        output.write(m)
-        output.close()
-
-
         # Build Page
-        page = Page(output_dirname, filename)
+        page = Page(output_dirname, f)
+        page.write_html_file(arg["output_dir"], dirname)
         arg["template_list"].append(page)
 
 
