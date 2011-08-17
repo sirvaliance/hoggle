@@ -85,7 +85,12 @@ def build_site(args, config):
     f.write(main_output)
     f.close()
 
+def start_blog(args, config):
+    blog_path = os.path.join(
+                    os.path.abspath(os.path.dirname(__file__)),
+                    "project_templates/blog")
 
+    dir_util.copy_tree(blog_path, os.getcwd())
 
 # Pulled directly from the Gondor client code
 def config_value(config, section, key, default=None):
@@ -101,9 +106,12 @@ def main():
     
     command_parsers = arg_parse.add_subparsers(dest="command")
 
-    command_parse = command_parsers.add_parser("build")
-    command_parse.add_argument("-repo", nargs=1)
-    command_parse.add_argument("-output", nargs=1)
+    build_parse = command_parsers.add_parser("build")
+    build_parse.add_argument("-repo", nargs=1)
+    build_parse.add_argument("-output", nargs=1)
+
+    blog_parse = command_parsers.add_parser("start-blog")
+    blog_parse.add_argument("-path", nargs=1)
     
     args = arg_parse.parse_args()
 
@@ -114,9 +122,11 @@ def main():
         "output_dir": config_value(config, "locations", "output_dir"),
     }
     if config["repo_dir"] is None or config["output_dir"] is None:
-        print ("You must setup a .hoggle file to run hoggle.")
+        print ("No .hoggle file found.")
+        print ("You must setup a .hoggle file to build a project.")
 
     {
         "build": build_site,
+        "start-blog": start_blog,
 
     }[args.command](args, config)
