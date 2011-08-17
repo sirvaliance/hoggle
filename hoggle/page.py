@@ -59,5 +59,3 @@ class Page(object):
         output.write(m)
         output.close()
 
-
-
