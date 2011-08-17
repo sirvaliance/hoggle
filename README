@@ -1,13 +1,29 @@
-A Python based static site generator (similar to Jekyll) from Markdown templates.
+ ___                                   ___           
+(   )                                 (   )          
+ | | .-.     .--.     .--.     .--.    | |    .--.   
+ | |/   \   /    \   /    \   /    \   | |   /    \  
+ |  .-. .  |  .-. ; ;  ,-. ' ;  ,-. '  | |  |  .-. ; 
+ | |  | |  | |  | | | |  | | | |  | |  | |  |  | | | 
+ | |  | |  | |  | | | |  | | | |  | |  | |  |  |/  | 
+ | |  | |  | |  | | | |  | | | |  | |  | |  |  ' _.' 
+ | |  | |  | '  | | | '  | | | '  | |  | |  |  .'.-. 
+ | |  | |  '  `-' / '  `-' | '  `-' |  | |  '  `-' / 
+(___)(___)  `.__.'   `.__. |  `.__. | (___)  `.__.'  
+                     ( `-' ;  ( `-' ;                
+                      `.__.    `.__.            
+
+
+A Python based static site generator from Markdown templates.
 
 Requirements:
 
-	https://github.com/FSX/misaka
+- https://github.com/FSX/misaka
+- http://tornadoweb.org
 
-	pip install misaka
+Install With Pip:
 
-    http://tornadoweb.org
-
+    pip install misaka
     pip install tornado
+    pip install git+https://github.com/sirvaliance/hoggle/
 
 
