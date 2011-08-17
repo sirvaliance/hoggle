@@ -90,7 +90,12 @@ def start_blog(args, config):
                     os.path.abspath(os.path.dirname(__file__)),
                     "project_templates/blog")
 
-    dir_util.copy_tree(blog_path, os.getcwd())
+    project_path = os.path.join(os.getcwd(), "blog")
+
+    if not os.path.exists(project_path):
+        os.makedirs(project_path)
+
+    dir_util.copy_tree(blog_path, project_path)
 
 # Pulled directly from the Gondor client code
 def config_value(config, section, key, default=None):

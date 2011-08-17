@@ -14,9 +14,9 @@ for root, dirs, files in os.walk('hoggle/project_templates'):
     dir_path = "/".join(dir_list)
 
     for f in files:
-        package_data_list.append((dir_path, f))
+        package_data_list.append(os.path.join(dir_path, f))
 
-
+package_data_list.append("app_templates/*.txt")
 
 print package_data_list
 
@@ -25,14 +25,8 @@ setup(
     name = "hoggle",
     version = "0.1",
     packages = find_packages(),
-    package_dir = {
-        "hoggle": "hoggle/project_templates"
-    },
     package_data = {
-        "hoggle": [
-            "app_templates/*.txt",
-            "project_templates/blog/static/css/*.css",
-        ],
+        "hoggle": package_data_list,
     },
 
     # Metadata for PyPI
