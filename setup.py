@@ -18,8 +18,6 @@ for root, dirs, files in os.walk('hoggle/project_templates'):
 
 package_data_list.append("app_templates/*.txt")
 
-print package_data_list
-
 setup(
 
     name = "hoggle",
