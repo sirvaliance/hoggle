@@ -39,5 +39,5 @@ setup(
             "hoggle = hoggle.__main__:main",
         ]
     },
-    install_requires = ['tornado', 'misaka'],
+    install_requires = ['tornado', 'misaka', 'argparse'],
 )
