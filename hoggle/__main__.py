@@ -106,7 +106,11 @@ def run_server(args, config):
     for the user and handle the subproccess correctly.
 
     """
-    p = Popen([os.path.join(config["output_dir"], 'main.py')], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+    script_path = os.path.join(config["output_dir"], 'main.py')
+
+    os.system('chmod +x ' + script_path)
+
+    p = Popen([script_path], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
 
     stdout = p.communicate(input=None)[0]
     print(stdout)
