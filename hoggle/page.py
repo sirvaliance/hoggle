@@ -19,11 +19,15 @@ class Page(object):
             page_handler = "/%s/%s/" % (output_dir_name, filename)
 
         self.name = page_name
+        self.title = self.create_title(output_dir_name)
         self.markdown_file = markdown_file
         self.filename = filename
         self.template_name = page_template_name
         self.handler = page_handler
         self.output_dir_name = output_dir_name
+
+    def create_title(self, output_dir_name):
+        return output_dir_name.replace("-", " ").title()
 
     def wrap_template(self, body):
         template_header = """

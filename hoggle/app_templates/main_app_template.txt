@@ -6,9 +6,15 @@ import uuid
 import tornado.ioloop
 import tornado.web
 
+pages_list = [
+{% for p in pages %}
+    {{ p.__dict__ }},
+{% end %}
+]
+
 class MainHandler(tornado.web.RequestHandler):
 	def get(self):
-		self.render("main_page.html")
+		self.render("main_page.html", pages_list=pages_list)
 
 
 class AboutHandler(tornado.web.RequestHandler):
@@ -19,7 +25,7 @@ class AboutHandler(tornado.web.RequestHandler):
 
 class {{ p.name }}(tornado.web.RequestHandler):
 	def get(self):
-		self.render("{{ p.template_name }}")
+		self.render("{{ p.template_name }}", pages_list=pages_list)
 {% end %}
 
 	
