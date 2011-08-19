@@ -17,6 +17,7 @@ import dircache
 import argparse
 import ConfigParser
 from distutils import dir_util
+from subprocess import Popen, PIPE, STDOUT
 
 from tornado import template
 
@@ -97,6 +98,20 @@ def start_blog(args, config):
 
     dir_util.copy_tree(blog_path, project_path)
 
+
+def run_server(args, config):
+    """ Executes the Tornado Script to Run the Server
+
+    This code is very hacky and should be edited to provide proper feedback
+    for the user and handle the subproccess correctly.
+
+    """
+    p = Popen([os.path.join(config["output_dir"], 'main.py')], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+
+    stdout = p.communicate(input=None)[0]
+    print(stdout)
+
+
 # Pulled directly from the Gondor client code
 def config_value(config, section, key, default=None):
     try:
@@ -117,6 +132,8 @@ def main():
 
     blog_parse = command_parsers.add_parser("start-blog")
     blog_parse.add_argument("-path", nargs=1)
+
+    runserver_parse = command_parsers.add_parser("runserver")
     
     args = arg_parse.parse_args()
 
@@ -133,5 +150,6 @@ def main():
     {
         "build": build_site,
         "start-blog": start_blog,
+        "runserver": run_server,
 
     }[args.command](args, config)
