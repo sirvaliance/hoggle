@@ -34,7 +34,7 @@ class Page(object):
         {% extends "../base.html" %}
 
         {% block content %}
-        <div class="grid_7">
+        <div class="grid_8">
 
         """
 
