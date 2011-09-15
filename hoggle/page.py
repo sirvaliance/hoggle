@@ -2,7 +2,7 @@ import misaka
 
 class Page(object):
 
-    def __init__(self, output_dir_name, markdown_file):
+    def __init__(self, output_dir_name, markdown_file, created, modified):
 
         filename = markdown_file.split('.md')[0]
 
@@ -25,6 +25,8 @@ class Page(object):
         self.template_name = page_template_name
         self.handler = page_handler
         self.output_dir_name = output_dir_name
+        self.created = created
+        self.modified = modified
 
     def create_title(self, output_dir_name):
         return output_dir_name.replace("-", " ").title()

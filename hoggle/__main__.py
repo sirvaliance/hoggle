@@ -13,6 +13,7 @@ application (command arg parsing section)
 import os
 import sys
 import re
+import time
 import dircache
 import argparse
 import ConfigParser
@@ -32,7 +33,7 @@ main_app_template = os.path.join(
 def find_markdown_templates(dirname):
     files = os.listdir(dirname)
     md_files = re.compile(".md$", re.IGNORECASE)
-    return filter(md_files.search, files) 
+    return filter(md_files.search, files)
 
 
 def create_templates(arg, dirname, names):
@@ -40,10 +41,11 @@ def create_templates(arg, dirname, names):
     output_dir = dirname.replace(arg["repo_dir"], "")
     e = output_dir.split("/")
     output_dirname = e[-1]
-    
-    template_path = os.path.join(arg['output_dir'],"templates/") + output_dirname
 
-	# Check if template dir exists, if not create
+    template_path = os.path.join(
+            arg['output_dir'], "templates/") + output_dirname
+
+    # Check if template dir exists, if not create
 
     if not os.path.exists(template_path):
         os.makedirs(template_path)
@@ -53,14 +55,24 @@ def create_templates(arg, dirname, names):
     files = find_markdown_templates(dirname)
 
     for f in files:
-        page = Page(output_dirname, f)
+
+        file_path = os.path.join(arg["repo_dir"], 'md', output_dirname, f)
+        """
+        created = time.ctime(os.path.getctime(file_path))
+        modified = time.ctime(os.path.getmtime(file_path))
+        """
+        created = os.path.getctime(file_path)
+        modified = os.path.getmtime(file_path)
+
+
+        page = Page(output_dirname, f, created, modified)
         page.write_html_file(arg["output_dir"], dirname)
         arg["page_list"].append(page)
         print "Generated Page At %s" % page.handler
 
 
 def build_site(args, config):
-    print "Hoggle: Building Site at %s" % config["repo_dir"] 
+    print "Hoggle: Building Site at %s" % config["repo_dir"]
 
     page_list = list()
 
@@ -71,20 +83,25 @@ def build_site(args, config):
             config["output_dir"])
 
     # Walk the md/ directory and generate the html templates
-    os.path.walk(os.path.join(config["repo_dir"], 'md/'), 
+    os.path.walk(os.path.join(config["repo_dir"], 'md/'),
                  create_templates,
-                {"repo_dir": config["repo_dir"], 
+                {"repo_dir": config["repo_dir"],
                  "output_dir": config["output_dir"],
-                 "page_list": page_list })
-
+                 "page_list": page_list})
 
     # Use Tornado's templating system to generate the main.py python
     # File that the project will be run off of
+    page_sorted = sorted(page_list, key=lambda page: page.created)
+
+    for page in page_sorted:
+        page.created = time.ctime(page.created)
+
     t = template.Template(open(main_app_template, 'r').read())
-    main_output = t.generate(pages=page_list)
+    main_output = t.generate(pages=page_sorted)
     f = open(config["output_dir"] + 'main.py', 'w')
     f.write(main_output)
     f.close()
+
 
 def start_blog(args, config):
     blog_path = os.path.join(
@@ -127,7 +144,7 @@ def config_value(config, section, key, default=None):
 def main():
     arg_parse = argparse.ArgumentParser(prog="hoggle")
     arg_parse.add_argument("-v", action="version", version="0.1")
-    
+
     command_parsers = arg_parse.add_subparsers(dest="command")
 
     build_parse = command_parsers.add_parser("build")
@@ -138,7 +155,7 @@ def main():
     blog_parse.add_argument("-path", nargs=1)
 
     runserver_parse = command_parsers.add_parser("runserver")
-    
+
     args = arg_parse.parse_args()
 
     config = ConfigParser.RawConfigParser()
