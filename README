@@ -12,8 +12,12 @@
                      ( `-' ;  ( `-' ;                
                       `.__.    `.__.            
 
+VERSION: Alpha 0.1
 
 A Python based static site generator from Markdown templates.
+
+WARNING: 
+This code has not yet been release yet.  Some, if not most, of the described below may not have been implemented yet.  Do not use this in a production environment until it is officially released.
 
 Requirements:
 
@@ -27,3 +31,34 @@ Install With Pip:
     pip install git+https://github.com/sirvaliance/hoggle/
 
 
+
+COMMANDS:
+
+*Implemented*
+
+"hoggle build"
+
+    OPTIONS:
+
+    --repo: Overrides the .hoggle argument "repo"
+
+    --output: Overrides the .hoggle argument "output"
+
+
+"hoggle runserver"
+
+
+"hoggle start-blog"
+
+
+*Not Implmented*
+
+"hoggle deploy*
+
+*hoggle start-site*
+
+
+
+SOFTWARE USED:
+
+The RSS feeds template is modeled after the example on https://secure.wikimedia.org/wikipedia/en/wiki/Atom_(standard)
