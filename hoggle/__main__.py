@@ -95,6 +95,8 @@ def build_site(args, config):
 
     for page in page_sorted:
         page.created = time.ctime(page.created)
+        page.modified = time.ctime(page.modified)
+
 
     t = template.Template(open(main_app_template, 'r').read())
     main_output = t.generate(pages=page_sorted)

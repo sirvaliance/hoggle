@@ -28,12 +28,18 @@ class {{ p.name }}(tornado.web.RequestHandler):
 		self.render("{{ p.template_name }}", pages_list=pages_list)
 {% end %}
 
+class Feed(tornado.web.RequestHandler):
+    def get(self):
+        self.set_header("Content-Type", "application/atom+xml")
+        self.render("atom.xml", pages_list=pages_list)
+        
 	
 class Application(tornado.web.Application):
 	def __init__(self):
 		handlers = [
 			(r"/", MainHandler),
 			(r"/about/", AboutHandler),
+            (r"/atom_feed/", Feed),
 
 			{% for p in pages %}
 			(r"{{ p.handler }}", {{ p.name }}),
